@@ -9,6 +9,8 @@ import math
 import random
 import numpy as np
 from sklearn.cluster import KMeans
+import matplotlib.pyplot as plt
+import matplotlib.lines as mlines
 
 def read_file(filename):
     array = []
@@ -77,20 +79,26 @@ class Net:
         self.neurons = [Neuron(n_entries) for n in range(n_neurons)] 
         
         
-        for epoch in range(2):
+        for epoch in range(500):
             
-            d = random.randint(0, 149)   
-            self.outputs = [n.calculate_output(data["input"][d]) for n in self.neurons]
+            d = random.randint(0, 149)  
+            entry = data["input"][d]
+            self.outputs = [n.calculate_output(entry) for n in self.neurons]
             
             #self.outputs = [[n.calculate_output(d) for n in self.neurons] for d in data["input"]]
             
-            print(self.outputs)
+            #print(self.outputs)
             
-            
+            self.update_weights(entry)
+        
+        return [n.weights for n in self.neurons]
+        
+        
+        
         
     def update_weights(self,entry):
         #[print(n.weights_output) for n in self.neurons] 
-        
+        new_weights = []
         for n in range(len(self.neurons)):
             weights = self.neurons[n].weights
             output = self.neurons[n].output
@@ -103,8 +111,28 @@ class Net:
                 weights[w] = weights[w] + (self.lr * ((output * entry[w]) - (output*part)))
                 
             #print(weights)
-            self.neurons[n].update_weight(weights)
+            #self.neurons[n].update_weight(weights)
+            new_weights.append(weights)    
             
+        for nw in range(len(new_weights)):
+            norm = [float(i)/max(new_weights[nw]) for i in new_weights[nw]]
+            print(norm)
+            
+            self.neurons[nw].update_weight(norm)
+  
+
+def show_tables(data,targets):
+    
+    data = np.transpose(data)    
+    
+    for ind in range(len(targets)):    
+        if(targets[ind] == 0): 
+            plt.plot(data[0][ind], data[1][ind], 'ro')
+        elif(targets[ind] == 1):
+            plt.plot(data[0][ind], data[1][ind], 'bo')
+        else:
+            plt.plot(data[0][ind], data[1][ind], 'go')
+    plt.show()
             
 if __name__ == "__main__":
     
@@ -124,6 +152,15 @@ if __name__ == "__main__":
     
     net = Net()
     
-    net.execute(data)
+    eigen = net.execute(data)
     
+    print(eigen)
+    
+    new_data = []
+    
+    for d in data["input"]:
+        new_d = [np.dot(d,eigen[0]),np.dot(d,eigen[1])]
+        #print(np.dot(d,eigen[0]),np.dot(d,eigen[1]))
+        new_data.append(new_d)
+    show_tables(new_data,data["target"])
     
