@@ -5,12 +5,9 @@ Created on Mon Dec  5 14:35:10 2016
 @author: PeDeNRiQue
 """
 
-import math
 import random
 import numpy as np
-from sklearn.cluster import KMeans
 import matplotlib.pyplot as plt
-import matplotlib.lines as mlines
 
 def read_file(filename):
     array = []
@@ -60,9 +57,14 @@ class Neuron:
         #print(self.weights,entries)
         self.entries = entries
         self.output = np.dot(entries, np.transpose(self.weights))
-        
-        return self.output
-    
+        #print("<",self.output,">")
+        #return self.output
+        if(self.output > 1):
+            return 1
+        elif(self.output < -1):
+            return -1
+        else:
+            return self.output
     def update_weight(self,new_weigths):
         self.weights = new_weigths
 
@@ -79,7 +81,7 @@ class Net:
         self.neurons = [Neuron(n_entries) for n in range(n_neurons)] 
         
         
-        for epoch in range(500):
+        for epoch in range(50):
             
             d = random.randint(0, 149)  
             entry = data["input"][d]
@@ -116,7 +118,7 @@ class Net:
             
         for nw in range(len(new_weights)):
             norm = [float(i)/max(new_weights[nw]) for i in new_weights[nw]]
-            print(norm)
+            #print("<",norm,new_weights,">")
             
             self.neurons[nw].update_weight(norm)
   

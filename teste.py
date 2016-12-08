@@ -4,12 +4,54 @@ Created on Mon Dec  5 21:47:14 2016
 
 @author: PeDeNRiQue
 """
+import numpy as np
 
-a = [0.02920384424670386, 0.5637064928298525, 0.4536177480363561, 0.25780503759269535] 
-b = [ 6.8,  3.2,  5.9,  2.3]
 
-soma = 0
-for i in range(4):
-    soma += a[i]*b[i]
+z1 = [-1,1,-1,1,1,1,-1,1,-1]
+z2 = [1,-1,1,-1,1,-1,1,-1,1]
+
+zm1 = []
+zm2 = []
+results = []
+
+for i in range(9):
+    temp = []
+    for j in range(9):
+        temp.append(z1[i] * z1[j])
+        print(z1[i] * z1[j],"  ",end="")
+    zm1.append(temp)
+    print()
     
-print(soma)
+print("--------------------------------------")
+for i in range(9):
+    temp = []
+    for j in range(9):
+        temp.append(z2[i] * z2[j])
+        print(z2[i] * z2[j],"  ",end="")
+    zm2.append(temp)
+    print()
+ 
+for i in range(9):
+    temp = []
+    for j in range(9):
+        temp.append((zm1[i][j] + zm2[i][j])/9)
+        print("{0:.2f}".format((zm1[i][j] + zm2[i][j])/9),"  ",end="")
+    results.append(temp)  
+    print()    
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+ 
