@@ -81,7 +81,7 @@ class Net:
         self.neurons = [Neuron(n_entries) for n in range(n_neurons)] 
         
         
-        for epoch in range(50):
+        for epoch in range(500):
             
             d = random.randint(0, 149)  
             entry = data["input"][d]
@@ -129,11 +129,14 @@ def show_tables(data,targets):
     
     for ind in range(len(targets)):    
         if(targets[ind] == 0): 
-            plt.plot(data[0][ind], data[1][ind], 'ro')
+            red, = plt.plot(data[0][ind], data[1][ind], 'ro',label="Íris Setosa")
         elif(targets[ind] == 1):
-            plt.plot(data[0][ind], data[1][ind], 'bo')
+            blue, = plt.plot(data[0][ind], data[1][ind], 'bs',label="Íris Versicolor")
         else:
-            plt.plot(data[0][ind], data[1][ind], 'go')
+            green, = plt.plot(data[0][ind], data[1][ind], 'g^',label="Íris Virgínica")
+    first_legend = plt.legend(handles=[red,blue,green], loc=1)
+    #ax = plt.gca().add_artist(first_legend)
+    plt.savefig("rna_pca.png", dpi = 100)
     plt.show()
             
 if __name__ == "__main__":
